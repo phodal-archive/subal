@@ -1,0 +1,24 @@
+{
+  "name": "heimdall",
+  "version": "0.0.1",
+  "description": "a architecture guard for typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phodal/heimdall.git"
+  },
+  "keywords": [
+    "Architecture",
+    "Guard",
+    "ArchUnit"
+  ],
+  "author": "Phodal HUANG",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/phodal/heimdall/issues"
+  },
+  "homepage": "https://github.com/phodal/heimdall#readme"
+}
