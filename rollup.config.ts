@@ -3,11 +3,12 @@ import commonjs from 'rollup-plugin-commonjs'
 import sourceMaps from 'rollup-plugin-sourcemaps'
 import camelCase from 'lodash.camelcase'
 import typescript from 'rollup-plugin-typescript2'
-import json from 'rollup-plugin-json'
+import json from 'rollup-plugin-json';
+import builtins from 'rollup-plugin-node-builtins';
 
-const pkg = require('./package.json')
+const pkg = require('./package.json');
 
-const libraryName = 'subal'
+const libraryName = 'subal';
 
 export default {
   input: `src/${libraryName}.ts`,
@@ -23,6 +24,7 @@ export default {
   plugins: [
     // Allow json resolution
     json(),
+    builtins(),
     // Compile TypeScript files
     typescript({ useTsconfigDeclarationDir: true }),
     // Allow bundling cjs modules (unlike webpack, rollup doesn't understand cjs)
