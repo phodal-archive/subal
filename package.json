@@ -1,5 +1,5 @@
 {
-  "name": "heimdall",
+  "name": "subal",
   "version": "0.0.1",
   "description": "a architecture guard for typescript",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/phodal/heimdall.git"
+    "url": "git+https://github.com/phodal/subal.git"
   },
   "keywords": [
     "Architecture",
@@ -18,7 +18,7 @@
   "author": "Phodal HUANG",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/phodal/heimdall/issues"
+    "url": "https://github.com/phodal/subal/issues"
   },
-  "homepage": "https://github.com/phodal/heimdall#readme"
+  "homepage": "https://github.com/phodal/subal#readme"
 }
