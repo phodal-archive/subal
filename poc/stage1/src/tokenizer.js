@@ -22,6 +22,23 @@ const NUMBER_STATES = {
   EXP_DIGIT_OR_SIGN: 7
 };
 
+const STRING_STATES = {
+  _START_: 0,
+  START_QUOTE_OR_CHAR: 1,
+  ESCAPE: 2
+};
+
+const ESCAPES_SYMBOL = {
+  '"': 0,		// Quotation mask
+  '\\': 1,	// Reverse solidus
+  '/': 2,		// Solidus
+  'b': 3,		// Backspace
+  'f': 4,		// Form feed
+  'n': 5,		// New line
+  'r': 6,		// Carriage return
+  't': 7,		// Horizontal tab
+  'u': 8		// 4 hexadecimal digits
+};
 
 // HELPERS
 
@@ -73,8 +90,68 @@ function parseKeyword(char, current) {
   return null;
 }
 
-function parseString(char, current) {
-  return null;
+function parseString(input, index) {
+  const startIndex = index;
+  let buffer = '';
+  let state = STRING_STATES._START_;
+
+  while (index < input.length) {
+    const char = input.charAt(index);
+
+    switch (state) {
+      case STRING_STATES._START_: {
+        if (char === '"') {
+          index ++;
+          state = STRING_STATES.START_QUOTE_OR_CHAR;
+        } else {
+          return null;
+        }
+        break;
+      }
+
+      case STRING_STATES.START_QUOTE_OR_CHAR: {
+        if (char === '\\') {
+          buffer += char;
+          index ++;
+          state = STRING_STATES.ESCAPE;
+        } else if (char === '"') {
+          index ++;
+          return {
+            type_str: TOKEN_TYPES_STR.STRING,
+            type: TOKEN_TYPES.STRING,
+            current: index,
+            value: input.slice(startIndex, index)
+          };
+        } else {
+          buffer += char;
+          index ++;
+        }
+        break;
+      }
+
+      case STRING_STATES.ESCAPE: {
+        if (char in ESCAPES_SYMBOL) {
+          buffer += char;
+          index ++;
+          if (char === 'u') {
+            for (let i = 0; i < 4; i ++) {
+              const curChar = input.charAt(index);
+              if (curChar && isHex(curChar)) {
+                buffer += curChar;
+                index ++;
+              } else {
+                return null;
+              }
+            }
+          }
+          state = STRING_STATES.START_QUOTE_OR_CHAR;
+        } else {
+          return null;
+        }
+        break;
+      }
+    }
+  }
 }
 
 function parseNumber(input, index) {
