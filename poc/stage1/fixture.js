@@ -1,12 +1,18 @@
-var fs = require('fs');
-var path = require('path');
-var tokenizer = require('./src/tokenizer');
+const fs = require('fs');
+const path = require('path');
+const Subal = require('./index');
 
-var filePath = path.join(__dirname, 'fixture/blogs.json');
+const filePath = path.join(__dirname, 'fixture/blogs.json');
 
 fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
   if (!err) {
-    let results = tokenizer(data);
+    let subal = new Subal(data);
+
+    let results = subal
+      .tokenizer()
+      .parser()
+      .build();
+
     console.log(results);
   } else {
     console.log(err);
