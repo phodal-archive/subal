@@ -50,10 +50,42 @@ const KEYWORD_TOKENS_MAP = { // Lexeme: Token
   'null': TOKEN_TYPES.NULL
 };
 
+const NUMBER_STATES = {
+  _START_: 0,
+  MINUS: 1,
+  ZERO: 2,
+  DIGIT: 3,
+  POINT: 4,
+  DIGIT_FRACTION: 5,
+  EXP: 6,
+  EXP_DIGIT_OR_SIGN: 7
+};
+
+const STRING_STATES = {
+  _START_: 0,
+  START_QUOTE_OR_CHAR: 1,
+  ESCAPE: 2
+};
+
+const ESCAPES_SYMBOL = {
+  '"': 0,		// Quotation mask
+  '\\': 1,	// Reverse solidus
+  '/': 2,		// Solidus
+  'b': 3,		// Backspace
+  'f': 4,		// Form feed
+  'n': 5,		// New line
+  'r': 6,		// Carriage return
+  't': 7,		// Horizontal tab
+  'u': 8		// 4 hexadecimal digits
+};
+
 module.exports = {
   PUNCTUATOR_TOKENS_MAP,
   KEYWORD_TOKENS_MAP,
   PUNCTUATOR_TOKENS_MAP_STR,
   TOKEN_TYPES,
-  TOKEN_TYPES_STR
+  TOKEN_TYPES_STR,
+  NUMBER_STATES,
+  STRING_STATES,
+  ESCAPES_SYMBOL
 };

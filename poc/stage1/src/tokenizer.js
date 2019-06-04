@@ -3,42 +3,16 @@
  * MIT Copyright (C) 2016 by Vlad Trushin
  */
 
-const constants = require('./constants');
-
-const TOKEN_TYPES = constants.TOKEN_TYPES;
-const PUNCTUATOR_TOKENS_MAP = constants.PUNCTUATOR_TOKENS_MAP;
-const PUNCTUATOR_TOKENS_MAP_STR = constants.PUNCTUATOR_TOKENS_MAP_STR;
-const KEYWORD_TOKENS_MAP = constants.KEYWORD_TOKENS_MAP;
-const TOKEN_TYPES_STR = constants.TOKEN_TYPES_STR;
-
-const NUMBER_STATES = {
-  _START_: 0,
-  MINUS: 1,
-  ZERO: 2,
-  DIGIT: 3,
-  POINT: 4,
-  DIGIT_FRACTION: 5,
-  EXP: 6,
-  EXP_DIGIT_OR_SIGN: 7
-};
-
-const STRING_STATES = {
-  _START_: 0,
-  START_QUOTE_OR_CHAR: 1,
-  ESCAPE: 2
-};
-
-const ESCAPES_SYMBOL = {
-  '"': 0,		// Quotation mask
-  '\\': 1,	// Reverse solidus
-  '/': 2,		// Solidus
-  'b': 3,		// Backspace
-  'f': 4,		// Form feed
-  'n': 5,		// New line
-  'r': 6,		// Carriage return
-  't': 7,		// Horizontal tab
-  'u': 8		// 4 hexadecimal digits
-};
+const {
+  PUNCTUATOR_TOKENS_MAP,
+  KEYWORD_TOKENS_MAP,
+  PUNCTUATOR_TOKENS_MAP_STR,
+  TOKEN_TYPES,
+  TOKEN_TYPES_STR,
+  NUMBER_STATES,
+  STRING_STATES,
+  ESCAPES_SYMBOL
+} = require('./constants');
 
 // HELPERS
 
@@ -101,7 +75,7 @@ function parseString(input, index) {
     switch (state) {
       case STRING_STATES._START_: {
         if (char === '"') {
-          index ++;
+          index++;
           state = STRING_STATES.START_QUOTE_OR_CHAR;
         } else {
           return null;
@@ -112,10 +86,10 @@ function parseString(input, index) {
       case STRING_STATES.START_QUOTE_OR_CHAR: {
         if (char === '\\') {
           buffer += char;
-          index ++;
+          index++;
           state = STRING_STATES.ESCAPE;
         } else if (char === '"') {
-          index ++;
+          index++;
           return {
             type_str: TOKEN_TYPES_STR.STRING,
             type: TOKEN_TYPES.STRING,
@@ -124,7 +98,7 @@ function parseString(input, index) {
           };
         } else {
           buffer += char;
-          index ++;
+          index++;
         }
         break;
       }
@@ -132,13 +106,13 @@ function parseString(input, index) {
       case STRING_STATES.ESCAPE: {
         if (char in ESCAPES_SYMBOL) {
           buffer += char;
-          index ++;
+          index++;
           if (char === 'u') {
-            for (let i = 0; i < 4; i ++) {
+            for (let i = 0; i < 4; i++) {
               const curChar = input.charAt(index);
               if (curChar && isHex(curChar)) {
                 buffer += curChar;
-                index ++;
+                index++;
               } else {
                 return null;
               }
@@ -278,14 +252,14 @@ function parseWhitespace(input, index) {
   const char = input.charAt(index);
 
   if (char === '\r') { // CR (Unix)
-    index ++;
+    index++;
     if (input.charAt(index) === '\n') { // CRLF (Windows)
-      index ++;
+      index++;
     }
   } else if (char === '\n') { // LF (MacOS)
-    index ++;
+    index++;
   } else if (char === '\t' || char === ' ') {
-    index ++;
+    index++;
   } else {
     return null;
   }
