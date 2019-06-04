@@ -1,30 +1,14 @@
-const tokenTypes = {
-  LEFT_BRACE: 0,		// {
-  RIGHT_BRACE: 1,		// }
-  LEFT_BRACKET: 2,	// [
-  RIGHT_BRACKET: 3,	// ]
-  COLON: 4,			// :
-  COMMA: 5,			// ,
-  STRING: 6,			//
-  NUMBER: 7,			//
-  TRUE: 8,			// true
-  FALSE: 9,			// false
-  NULL: 10			// null
-};
+const constants = require('./constants');
 
-const punctuatorTokensMap = { // Lexeme: Token
-  '{': tokenTypes.LEFT_BRACE,
-  '}': tokenTypes.RIGHT_BRACE,
-  '[': tokenTypes.LEFT_BRACKET,
-  ']': tokenTypes.RIGHT_BRACKET,
-  ':': tokenTypes.COLON,
-  ',': tokenTypes.COMMA
-};
+const PUNCTUATOR_TOKENS_MAP = constants.PUNCTUATOR_TOKENS_MAP;
+const PUNCTUATOR_TOKENS_MAP_STR = constants.PUNCTUATOR_TOKENS_MAP_STR;
+const KEYWORD_TOKENS_MAP = constants.KEYWORD_TOKENS_MAP;
 
 function parseChar(char, current) {
-  if (char in punctuatorTokensMap) {
+  if (char in PUNCTUATOR_TOKENS_MAP) {
     return {
-      type: punctuatorTokensMap[char],
+      type: PUNCTUATOR_TOKENS_MAP[char],
+      type_str: PUNCTUATOR_TOKENS_MAP_STR[char],
       current: current + 1,
       value: null
     };
@@ -34,6 +18,17 @@ function parseChar(char, current) {
 }
 
 function parseKeyword(char, current) {
+  for (const name in KEYWORD_TOKENS_MAP) {
+    if (KEYWORD_TOKENS_MAP.hasOwnProperty(name) && char.substr(current, name.length) === name) {
+      return {
+        type: KEYWORD_TOKENS_MAP[name],
+        type_str: PUNCTUATOR_TOKENS_MAP_STR[char],
+        current: current + name.length,
+        value: name
+      };
+    }
+  }
+
   return null;
 }
 
@@ -60,6 +55,7 @@ function tokenizer(input) {
 
     if (matched) {
       const token = {
+        type_str: matched.type_str,
         type: matched.type,
         value: matched.value
       };
