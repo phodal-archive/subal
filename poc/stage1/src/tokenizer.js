@@ -1,3 +1,8 @@
+/*
+ * Based on [https://github.com/vtrushin/json-to-ast](https://github.com/vtrushin/json-to-ast)
+ * MIT Copyright (C) 2016 by Vlad Trushin
+ */
+
 const constants = require('./constants');
 
 const PUNCTUATOR_TOKENS_MAP = constants.PUNCTUATOR_TOKENS_MAP;
@@ -40,12 +45,41 @@ function parseNumber(char, current) {
   return null;
 }
 
+
+function parseWhitespace(input, index) {
+  const char = input.charAt(index);
+
+  if (char === '\r') { // CR (Unix)
+    index ++;
+    if (input.charAt(index) === '\n') { // CRLF (Windows)
+      index ++;
+    }
+  } else if (char === '\n') { // LF (MacOS)
+    index ++;
+  } else if (char === '\t' || char === ' ') {
+    index ++;
+  } else {
+    return null;
+  }
+
+  return {
+    index
+  };
+}
+
 function tokenizer(input) {
   let current = 0;
   let tokens = [];
 
   while (current < input.length) {
     let char = input[current];
+
+    const whitespace = parseWhitespace(char, current);
+
+    if (whitespace) {
+      current = whitespace.current;
+      continue;
+    }
 
     let matched =
       parseChar(char, current)
