@@ -1,0 +1,35 @@
+{
+  "id": 195,
+  "user": "Phodal Huang",
+  "user_bio": "phodal",
+  "title": "Tock 安全嵌入式操作系统快速上手指南",
+  "slug": "tock-security-os-quickstart",
+  "description": "Tock是一个嵌入式操作系统，专为在基于 Cortex-M 的嵌入式平台上运行多个并发的，互不信任的应用程序而设计。本文介绍了如何使用源码构建 Tock 嵌入式系统。",
+  "updated": "2018-06-14T13:32:14.777133Z",
+  "content": "Tock是一个嵌入式操作系统，专为在基于 Cortex-M 的嵌入式平台上运行多个并发的，互不信任的应用程序而设计。本文介绍了如何使用源码构建 Tock 嵌入式系统。\r\n\r\n> Tock 是一个嵌入式操作系统，专为在基于 Cortex-M 的嵌入式平台上运行多个并发的，互不信任的应用程序而设计。Tock 的设计围绕着保护，无论是潜在的恶意应用程序还是设备驱动程序。Tock 使用两种机制来保护操作系统的不同组件。首先，内核和设备驱动程序是用 Rust 编写的，这是一种系统编程语言，它提供编译时内存安全性，类型安全性和严格别名。Tock 使用 Rust 来保护内核（例如调度程序和硬件抽象层）不受平台特定的设备驱动程序影响，也可以隔离设备驱动程序。其次，Tock 使用内存保护单元来隔离应用程序和内核。\r\n\r\n环境准备\r\n---\r\n\r\n在这里，我们需要的条件有：\r\n\r\n1. [Rust](http://www.rust-lang.org/)（安装 ``rustup``，以让 Tock 自动选择合适的版本）\r\n2. [Xargo](http://www.rust-lang.org/)（Rust 的 ``cargo`` 封装，为嵌入式目标安装核心库）\r\n3. [arm-none-eabi](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads) 工具链（版本 >= 5.2）\r\n4. 命令行工具：``wget``，``sed``，``make``，``cmake``\r\n\r\n### 超快设置\r\n\r\nmacOS：\r\n\r\n```\r\n$ curl https://sh.rustup.rs -sSf | sh\r\n$ brew tap ARMmbed/homebrew-formulae && brew update && brew install arm-none-eabi-gcc\r\n$ pip3 install tockloader\r\n```\r\n\r\nUbuntu：\r\n\r\n```\r\n$ curl https://sh.rustup.rs -sSf | sh\r\n$ sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa && sudo apt update && sudo apt install gcc-arm-embedded\r\n$ pip3 install tockloader --user\r\n$ grep -q dialout <(groups $(whoami)) || sudo usermod -a -G dialout $(whoami) # Note, will need to reboot if prompted for password\r\n```\r\n\r\n然后通过在 ``boards/<platform>`` 目录中运行 ``make`` 来构建内核。\r\n\r\n### 安装依赖\r\n\r\n这些步骤需要进一步深入。请注意，构建系统能够安装其中一些工具，但您也可以自行安装它们。\r\n\r\n#### Rust (nightly)\r\n\r\n我们使用的是 ``rustc 1.24.0-nightly (8e7a609e6 2018-01-04)``。 我们建议使用 ``rustup`` 进行安装，以便可以管理 Rust 的多个版本，并继续使用其他 Rust 代码的稳定版本：\r\n\r\n```\r\n$ curl https://sh.rustup.rs -sSf | sh\r\n```\r\n\r\n这将在您的主目录中安装 ``rustup`` ，因此您需要获取 ``~/.profile`` 或打开一个新的 shell 以将 ``.cargo/bin`` 目录添加到 ``$PATH`` 中。\r\n\r\n\r\n然后安装正确的 nightly 版本的Rust：\r\n\r\n```\r\n$ rustup install nightly-2018-01-05\r\n```\r\n\r\n#### Xargo\r\n\r\n用于 ARM Cortex-M 目标的 Rust 核心库默认没有 ``rustup``，因此我们使用 xargo（cargo 包装）编译这些库。\r\n\r\n```\r\n$ cargo install xargo\r\n```\r\n\r\n#### ``arm-none-eabi`` 工具链\r\n\r\n我们通常会获取 ARM 发布的 ``arm-none-eabi-gcc`` 的[最新版本](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)。\r\n\r\n``arm-none-eabi-gcc`` 版本 5.1 及更早的版本或其他版本与早于 2.3 版本的 newlib 版本一起打包时存在已知问题，因为它们会遇到缺少 ARM 内部函数（例如 ``__aeabi_memclr``）的问题。 Tock 不支持这些版本。\r\n\r\n**编译的二进制文件**\r\n\r\n预编译的二进制文件可[从 ARM 获得](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads)。 以下建议将设置操作系统的软件包管理器，以获取 ARM 的最新版本。\r\n\r\n**MacOS**\r\n\r\n使用 Homebrew（推荐）：\r\n\r\n```\r\n$ brew tap ARMmbed/homebrew-formulae\r\n$ brew update\r\n$ brew install arm-none-eabi-gcc\r\n```\r\n\r\n或者 MacPorts：\r\n\r\n```\r\n$ port install arm-none-eabi-gcc\r\n```\r\n\r\n**抬头！**\r\n\r\n``make debug`` 目标会要求 Tock 生成系统生成列表（反汇编）文件。一些开发人员已经注意到，``arm-none-eabi-objdump`` 在 mac 上花了很长时间（命令几分钟），而活动监视器报告 ``opendirectoryd`` 挂钩了 CPU。\r\n\r\n这是一个已知问题，您可以通过从 ``/etc/auto_master`` 注释掉 ``/home`` 行然后运行 ``sudo automount -vc`` 来应用更改来解决这个问题。\r\n\r\n**Linux**\r\n\r\n如果你在安装二进制文件时遇到了 “\"no such file or directory” 的错误，那么你很可能会丢失所需的库。检查您是否安装了 64 位版本的 ``libc``。\r\n\r\n**Ubuntu**\r\n\r\n```\r\n$ sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa\r\n$ sudo apt update\r\n$ sudo apt install gcc-arm-embedded\r\n```\r\n\r\n**Arch**\r\n\r\n在 Arch Linux 上，``pacman`` 中的 ``arm-none-eabi-newlib`` 软件包包含足够的最新版本的 newlibc。\r\n\r\n```\r\n$ sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib arm-none-eabi-gdb\r\n```\r\n\r\n**Windows**\r\n\r\n您可以从上面列出的 ARM 站点下载适用于 Windows 的预编译的二进制文件。虽然我们希望事情能够在 Windows 上运行，但目前还没有活跃的 Tock 开发人员在 Windows 上开发，所以可能会有一些意想不到的陷阱。\r\n\r\n**其它**\r\n\r\n或者，如果您想在 ``arm-none-eabi-gdb`` 中使用模拟器模式，则可以按照以下顺序在工具目录中使用构建脚本：``build-arm-binutils``，然后使用 ``build-arm-gcc``  然后使用 ``build-arm-gdb``。\r\n\r\n编译内核\r\n---\r\n\r\nTock 为其支持的每个开发板构建了一个独特的内核。 电路板包括诸如将正确的芯片和引脚分配拉到一起的细节。要构建内核，首先选择一个开发板，然后导航到该开发板目录。 例如 ``cd boards/hail ; make``。\r\n\r\n有些开发板有特殊的构建选项，只能在开发板的目录中使用。所有的开发板都有一些共同的目标：\r\n\r\n - all（默认）：编译此板的 Tock。\r\n - debug：为调试支持生成内部版本，细节因板而异。\r\n - doc：为该电路板构建文档。\r\n - clean：删除该板的内置制品。\r\n - flash：使用 JTAG 加载代码（如果可用）。\r\n - program：使用引导程序加载代码（如果可用）。\r\n\r\n每块开发板上的自述（README）文件提供了每个开发板的更多细节。\r\n\r\n编译程序\r\n---\r\n\r\n所有用户级代码都位于 ``userland`` 子目录中。 这包括一个专门编译的 ``newlib`` 版本，一个用于与内核通信的用户级库以及特定的驱动程序和各种示例应用程序。\r\n\r\n编译的应用程序是特定于体系结构的（例如cortex-m4，cortex-m0），因为编译器为每个变体发出略微不同的指令。 编译的应用程序也可能取决于特定的驱动程序，并非所有的主板都提 如果您将应用程序加载到不支持所使用的每个驱动程序/系统调用的主板上，则会返回一些带有返回错误代码（ENODEVICE 或 ENOSUPPORT）的系统调用。\r\n\r\n应用程序是针对 Tock 支持的所有体系结构构建的，目前为 cortex-m0 和 cortex-m4 。 上传代码时，开发板板选择适当的架构（例如 imix 电路板上的 SAM4L 的 cortex-m4）。\r\n\r\n要编译应用程序，请转至所需的应用程序并制作。 例如：\r\n\r\n```\r\n$ cd userland/examples/blink/\r\n$ make\r\n```\r\n\r\n这将构建应用程序并生成 Tock 二进制格式的二进制文件（使用 ``elf2tbf`` 实用程序）：``userland/examples/blink/build/cortex-m4/cortex-m4.bin``。\r\n\r\n原文链接：[https://github.com/helena-project/tock/blob/master/doc/Getting_Started.md](https://github.com/helena-project/tock/blob/master/doc/Getting_Started.md)",
+  "featured_image": "uploads/blog/edge-devices/.thumbnails/nrf51dk.jpg/nrf51dk-600x360.jpg",
+  "categories": [
+    {
+      "id": 14,
+      "title": "快速入门",
+      "make": null,
+      "slug": "快速入门-1"
+    }
+  ],
+  "related_posts": [
+    {
+      "id": 110,
+      "title": "使用 Mongoose OS 和 AWS IoT 进行安全远程设备管理，适用于ESP32，ESP8266，TI CC3200，STM32",
+      "description": "在本文中，我们演示和解释 Mongoose OS 结合 AWS IoT 如何实现安全的远程设备管理。首先让我展示什么是可以实现的，然后我将解释这其中的原理。",
+      "featured_image": "uploads/blog/esp32/mongoose.jpg",
+      "user": "Phodal Huang"
+    },
+    {
+      "id": 85,
+      "title": "Mongoose OS + ESP8266 + AWS IoT 制作智能加热器",
+      "description": "这里所说的『智能加热器』（Smart Heater）是指：加热器设备能报告当前温度、响应状态请求以及接受开关加热器的命令。",
+      "featured_image": "uploads/blog/esp8266/mongooseos.jpg",
+      "user": "Phodal Huang"
+    }
+  ]
+}
