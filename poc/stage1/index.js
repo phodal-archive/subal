@@ -18,7 +18,7 @@ class Subal {
   };
 
   generator() {
-    this.code = generator(this.data);
+    this.code = generator(this.ast);
     return this;
   };
 
