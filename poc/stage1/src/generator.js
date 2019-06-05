@@ -27,8 +27,7 @@ function codeGenerator(input, node, parentNode, nodeInfo) {
       }
       break;
     default:
-      node.value = object;
-    // do somthing;
+      throw new Error('Error Type');
   }
 }
 
