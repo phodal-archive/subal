@@ -318,7 +318,7 @@ function parseValue(tokenList, index) {
 }
 
 function parser(tokens) {
-  return parseValue(tokens, 0);
+  return parseValue(tokens, 0).value;
 }
 
 module.exports = parser;

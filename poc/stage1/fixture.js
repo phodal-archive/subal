@@ -8,12 +8,14 @@ fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
   if (!err) {
     let subal = new Subal(data);
 
+    console.log(subal.tokenizer().tokens);
+
     let results = subal
       .tokenizer()
       .parser()
       .build();
 
-    console.log(results);
+    console.log(JSON.stringify(results));
   } else {
     console.log(err);
   }
