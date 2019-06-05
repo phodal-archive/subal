@@ -13,6 +13,8 @@ fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
       .parser()
       .generator()
       .build();
+
+    console.log(results);
   } else {
     console.log(err);
   }

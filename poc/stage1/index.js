@@ -17,7 +17,10 @@ class Subal {
     return this;
   };
 
-  generator() {
+  generator(isDebug) {
+    if (isDebug) {
+      console.log(JSON.stringify(this.ast));
+    }
     this.code = generator(this.ast);
     return this;
   };
