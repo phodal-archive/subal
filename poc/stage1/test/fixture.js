@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const Subal = require('./index');
+const Subal = require('../index');
 
 const filePath = path.join(__dirname, 'fixture/blogs.json');
 
