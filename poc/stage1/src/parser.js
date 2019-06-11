@@ -12,7 +12,7 @@ const {
   NUMBER_STATES,
   STRING_STATES,
   ESCAPES_SYMBOL
-} = require('./constants');
+} = require('./utils/constants');
 
 
 const escapes = {
