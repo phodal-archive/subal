@@ -15,7 +15,6 @@ function codeGenerator(input, node, parentNode, nodeInfo) {
         nodeInfo.currentIndex = 0;
         nodeInfo.children = nodeInfo;
 
-        console.log(" - " + node.key.value);
         codeGenerator(input, node.value.children[nodeInfo.currentIndex], parentNode, nodeInfo);
       } else {
         if (nodeInfo.children && nodeInfo.children.currentIndex === parentNode.children.length) {
