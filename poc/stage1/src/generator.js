@@ -1,41 +1,51 @@
-let modelIndex = 1;
+function codeGenerator(originNode, node, res) {
+  let firstNode = node[0];
+  res.push(firstNode);
 
-function codeGenerator(input, node, parentNode, nodeInfo) {
-  if (!node) {
-    return;
+  if (firstNode && firstNode.children) {
+    return codeGenerator(originNode, firstNode.children, res);
   }
-  switch (node.type) {
+
+  if (!firstNode) {
+    return ;
+  }
+
+  switch (firstNode.type) {
     case 'Object':
-      nodeInfo.currentIndex = 0;
-      codeGenerator(input, node.children[nodeInfo.currentIndex], node, nodeInfo);
+      break;
+    case 'Literal':
       break;
     case 'Property':
-      nodeInfo.currentIndex++;
-      if (node.value.children) {
-        nodeInfo.currentIndex = 0;
-        nodeInfo.children = nodeInfo;
-
-        codeGenerator(input, node.value.children[nodeInfo.currentIndex], parentNode, nodeInfo);
-      } else {
-        if (nodeInfo.children && nodeInfo.children.currentIndex === parentNode.children.length) {
-          codeGenerator(input, parentNode.children[nodeInfo.currentIndex], parentNode, nodeInfo);
-        }
-
-        console.log(node.key.value);
-        codeGenerator(input, parentNode.children[nodeInfo.currentIndex], parentNode, nodeInfo);
-      }
       break;
     default:
       throw new Error('Error Type');
   }
+
+  res.pop();
+
+  let lastNode = res[res.length - 1];
+  if (lastNode.children && lastNode.children.length) {
+    lastNode.children.shift();
+    return codeGenerator(originNode, lastNode.children, res);
+  } else if (lastNode.value && lastNode.value.children) {
+    console.log(lastNode.value.children);
+    lastNode.value.children.shift();
+    return codeGenerator(originNode, lastNode.value.children, res);
+  } else {
+    delete lastNode.children;
+    return codeGenerator(originNode, res.pop(), res);
+  }
 }
 
-function generator(node, results, modelIndex) {
-  var nodeInfo = {
-    currentIndex: 0,
-    children: {}
-  };
-  return codeGenerator(node, node, node, nodeInfo);
+function generator(node) {
+  let res = [];
+
+  if (typeof node === 'object') {
+    node = [node];
+  }
+
+  let dataSource = JSON.parse(JSON.stringify(node));
+  return codeGenerator(node, dataSource, res);
 }
 
 module.exports = generator;
