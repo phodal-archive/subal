@@ -15,6 +15,11 @@
       "childNodes": [
         "aaa",
         "bbbbbb"
+      ],
+      "childNodesObjects": [
+        {
+          "nodesObject": 123
+        }
       ]
     }
   ]

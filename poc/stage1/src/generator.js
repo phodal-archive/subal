@@ -6,7 +6,7 @@ function codeGenerator(originNode, node, res) {
   } else {
     firstNode = res.pop();
     if (!firstNode) {
-      return res;
+      return null;
     }
     if (firstNode.children) {
       firstNode.children.shift();
@@ -19,7 +19,16 @@ function codeGenerator(originNode, node, res) {
   if (firstNode && firstNode.children) {
     return codeGenerator(originNode, firstNode.children, res);
   }
-  console.log(firstNode.type, firstNode.value);
+
+  if (firstNode.value && firstNode.value.children) {
+    return codeGenerator(originNode, firstNode.value.children, res);
+  }
+
+  if (firstNode.value && firstNode.value.value) {
+    console.log(firstNode.value.value);
+  } else {
+    console.log(firstNode.value);
+  }
 
   switch (firstNode.type) {
     case 'Object':
@@ -33,22 +42,14 @@ function codeGenerator(originNode, node, res) {
       if (firstNode && firstNode.children) {
         return codeGenerator(originNode, firstNode.children, res);
       }
-      if (firstNode.value && firstNode.value.children) {
-        return codeGenerator(originNode, firstNode.value.children, res);
-      }
       break;
     default:
       throw new Error('Error Type');
   }
 
-  if (firstNode.value && firstNode.value.children) {
-    firstNode.value.children.shift();
-    return codeGenerator(originNode, firstNode.value.children, res);
-  }
-
   res.pop();
 
-  if (!res.length) return res;
+  if (!res.length) return null;
 
   let lastNode = res[res.length - 1];
 
@@ -58,7 +59,7 @@ function codeGenerator(originNode, node, res) {
   }
 
   delete lastNode.children;
-  return codeGenerator(originNode, res.pop(), res);
+  return codeGenerator(originNode, lastNode, res);
 }
 
 function generator(node) {
