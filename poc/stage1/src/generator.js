@@ -11,13 +11,15 @@ function codeGenerator(originNode, node, res) {
     if (firstNode.children) {
       firstNode.children.shift();
     }
+    if (firstNode.value && firstNode.value.children) {
+      firstNode.value.children.shift();
+    }
   }
 
   if (firstNode && firstNode.children) {
     return codeGenerator(originNode, firstNode.children, res);
   }
-
-  console.log(firstNode.key.value, firstNode.value.value);
+  console.log(firstNode.type, firstNode.value);
 
   switch (firstNode.type) {
     case 'Object':
@@ -28,13 +30,20 @@ function codeGenerator(originNode, node, res) {
     case 'Literal':
       break;
     case 'Property':
+      if (firstNode && firstNode.children) {
+        return codeGenerator(originNode, firstNode.children, res);
+      }
       if (firstNode.value && firstNode.value.children) {
-        // firstNode.value.children.shift();
         return codeGenerator(originNode, firstNode.value.children, res);
       }
       break;
     default:
       throw new Error('Error Type');
+  }
+
+  if (firstNode.value && firstNode.value.children) {
+    firstNode.value.children.shift();
+    return codeGenerator(originNode, firstNode.value.children, res);
   }
 
   res.pop();
