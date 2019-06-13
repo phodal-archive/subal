@@ -18,7 +18,9 @@
       ],
       "childNodesObjects": [
         {
-          "nodesObject": 123
+          "subNodes": [
+            "12313"
+          ]
         }
       ]
     }
