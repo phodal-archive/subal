@@ -27,17 +27,22 @@ function codeGenerator(originNode, node, res, result) {
     return codeGenerator(originNode, firstNode.children, res, result);
   }
 
- // Array
+  // Array
   if (firstNode.value && firstNode.value.children) {
-    console.log(firstNode.key.value);
+    if (firstNode.value.children.length > 0) {
+      console.log(firstNode.key.value);
+      console.log(firstNode.type, firstNode.value.type);
+    }
     return codeGenerator(originNode, firstNode.value.children, res, result);
   }
 
   // Generator
   if (firstNode.value && firstNode.value.value) {
     console.log(firstNode.key && firstNode.key.value, typeof firstNode.value.value);
+    console.log(firstNode.type, firstNode.value.type);
   } else {
     console.log(firstNode.key && firstNode.key.value, typeof firstNode.value);
+    console.log(firstNode.type, firstNode.value.type);
   }
 
   res.pop();
@@ -61,6 +66,8 @@ function generator(node) {
   if (typeof node === 'object') {
     node = [node];
   }
+
+  // TODO: parseObject && parseArray
 
   let dataSource = JSON.parse(JSON.stringify(node));
   return codeGenerator(node, dataSource, res, result);
