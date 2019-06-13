@@ -6,7 +6,7 @@ function codeGenerator(originNode, node, res) {
   } else {
     firstNode = res.pop();
     if (!firstNode) {
-      return;
+      return res;
     }
     if (firstNode.children) {
       firstNode.children.shift();
@@ -16,6 +16,8 @@ function codeGenerator(originNode, node, res) {
   if (firstNode && firstNode.children) {
     return codeGenerator(originNode, firstNode.children, res);
   }
+
+  console.log(firstNode.key.value, firstNode.value.value);
 
   switch (firstNode.type) {
     case 'Object':
@@ -27,9 +29,9 @@ function codeGenerator(originNode, node, res) {
       break;
     case 'Property':
       if (firstNode.value && firstNode.value.children) {
+        // firstNode.value.children.shift();
         return codeGenerator(originNode, firstNode.value.children, res);
       }
-      console.log(firstNode.key.value, firstNode.value.value);
       break;
     default:
       throw new Error('Error Type');
