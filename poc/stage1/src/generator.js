@@ -6,13 +6,34 @@ function buildArray(node) {
       break;
     }
     case 'Literal':
-      console.log(node.value, typeof node.value);
+      // console.log(node.value, typeof node.value);
       break;
   }
 }
 
+function buildObject(node) {
+  let result = '';
+  for (let i = 0; i < node.children.length; i++) {
+    const childNode = node.children[i];
+    const objectKey = uppercaseLetter(childNode.key.value);
+    switch (childNode.value.type) {
+      case 'Array': {
+        result += objectKey + 's:' + objectKey + '\n' ;
+        buildArray([childNode.value.children[0]]);
+        break;
+      }
+      case 'Literal': {
+        result += uppercaseLetter(childNode.key.value) + ':' + typeof childNode.value.value + '\n';
+        break;
+      }
+    }
+  }
+  // result += '}';
+  console.log(result);
+  return result;
+}
+
 function uppercaseLetter(str) {
-  console.log(str, str.length);
   if (str.charAt(0) === '"') {
     str = str.substr(1);
   }
@@ -27,23 +48,6 @@ function uppercaseLetter(str) {
   }
 
   return str;
-}
-
-function buildObject(node) {
-  for (let i = 0; i < node.children.length; i++) {
-    const childNode = node.children[i];
-    console.log(uppercaseLetter(childNode.key.value));
-    switch (childNode.value.type) {
-      case 'Array': {
-        buildArray([childNode.value.children[0]]);
-        break;
-      }
-      case 'Literal': {
-        console.log(childNode.value.value);
-        break;
-      }
-    }
-  }
 }
 
 function codeGenerator(originNode, node, res, result) {
@@ -116,8 +120,9 @@ function generator(node) {
 
   // TODO: parseObject && parseArray
 
-  let dataSource = JSON.parse(JSON.stringify(node));
-  return codeGenerator(node, dataSource, res, result);
+  // let dataSource = JSON.parse(JSON.stringify(node));
+  // return codeGenerator(node, dataSource, res, result);
+  return buildArray(node);
 }
 
 module.exports = generator;
