@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Subal = require('../index');
 
-const filePath = path.join(__dirname, 'fixture/test.json');
+const filePath = path.join(__dirname, 'fixture/tests-simple.json');
 
 fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
   if (!err) {

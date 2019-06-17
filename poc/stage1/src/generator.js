@@ -1,14 +1,16 @@
-function buildArray(node, rootName) {
-  let result = '';
+function buildArray(node, rootName, result) {
   node = node[0];
   switch (node.type) {
     case 'Object': {
-      result += buildObject(node);
+      let buildObject1 = buildObject(node, result);
+      if (buildObject1) {
+        result.childNodes.push(buildObject1);
+      }
       break;
     }
     case 'Literal':
       if (rootName) {
-        result += ' ' + typeof node.value + ';';
+        result.currentNode += rootName + ': ' + typeof node.value + ';\n';
       }
       break;
   }
@@ -16,26 +18,28 @@ function buildArray(node, rootName) {
   return result;
 }
 
-function buildObject(node) {
-  let result = '{\n';
+function buildObject(node, result) {
+  let objectResult = '';
   for (let i = 0; i < node.children.length; i++) {
     const childNode = node.children[i];
     const objectKey = uppercaseLetter(childNode.key.value);
     switch (childNode.value.type) {
       case 'Array': {
-        result += `${objectKey}s:${objectKey}[];\n` ;
-        let arrayResult = buildArray([childNode.value.children[0]], `${objectKey}`);
-        result += `${objectKey}: ${arrayResult}`;
+        result.currentNode += `${objectKey}s: ${objectKey}[];\n` ;
+        let arrayResult = buildArray([childNode.value.children[0]], `${objectKey}`, result);
+        // console.log(arrayResult);
+        objectResult += `${arrayResult.currentNode}`;
         break;
       }
       case 'Literal': {
-        result += `${uppercaseLetter(childNode.key.value)}: ${typeof childNode.value.value};\n`;
+        result.currentNode += `${uppercaseLetter(childNode.key.value)}: ${typeof childNode.value.value};\n`;
         break;
       }
     }
   }
-  result += '}\n';
-  return result;
+
+  // objectResult += '}\n';
+  return objectResult;
 }
 
 function uppercaseLetter(str) {
@@ -116,8 +120,10 @@ function codeGenerator(originNode, node, res, result) {
 }
 
 function generator(node) {
-  let res = [];
-  // let result = {};
+  let result = {
+    childNodes: [],
+    currentNode: ''
+  };
 
   if (typeof node === 'object') {
     node = [node];
@@ -127,8 +133,9 @@ function generator(node) {
 
   // let dataSource = JSON.parse(JSON.stringify(node));
   // return codeGenerator(node, dataSource, res, result);
-  let result = buildArray(node, null);
-  console.log(result);
+  result = buildArray(node, null, result);
+  console.log('{\n' + result.currentNode + '}');
+  // console.log(result.childNodes);
   return result;
 }
 
