@@ -22,9 +22,11 @@ function buildObject(node, result) {
   let objectResult = '';
   for (let i = 0; i < node.children.length; i++) {
     const childNode = node.children[i];
-    const objectKey = uppercaseLetter(childNode.key.value);
+    let objectKey = childNode.key.value
+
     switch (childNode.value.type) {
       case 'Array': {
+        objectKey = uppercaseLetter(childNode.key.value);;
         result.currentNode += `${objectKey}s: ${objectKey}[];\n` ;
         let arrayResult = buildArray([childNode.value.children[0]], `${objectKey}`, result);
         // console.log(arrayResult);
@@ -32,7 +34,7 @@ function buildObject(node, result) {
         break;
       }
       case 'Literal': {
-        result.currentNode += `${uppercaseLetter(childNode.key.value)}: ${typeof childNode.value.value};\n`;
+        result.currentNode += `${uppercaseFirstLetter(childNode.key.value)}: ${typeof childNode.value.value};\n`;
         break;
       }
     }
@@ -42,7 +44,7 @@ function buildObject(node, result) {
   return objectResult;
 }
 
-function uppercaseLetter(str) {
+function uppercaseFirstLetter(str) {
   if (str.charAt(0) === '"') {
     str = str.substr(1);
   }
@@ -52,6 +54,12 @@ function uppercaseLetter(str) {
   }
 
   str = str.charAt(0).toUpperCase() + str.slice(1);
+  return str;
+}
+
+function uppercaseLetter(str) {
+  str = uppercaseFirstLetter(str);
+
   if (str[str.length - 1] === 's') {
     str = str.substr(0, str.length - 1);
   }
@@ -134,7 +142,7 @@ function generator(node) {
   // let dataSource = JSON.parse(JSON.stringify(node));
   // return codeGenerator(node, dataSource, res, result);
   result = buildArray(node, null, result);
-  console.log('{\n' + result.currentNode + '}');
+  // console.log('{\n' + result.currentNode + '}');
   // console.log(result.childNodes);
   return result;
 }
