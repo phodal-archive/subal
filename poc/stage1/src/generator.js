@@ -1,15 +1,17 @@
+const ROOT_NAME = 'heimdallRoot';
+
 function buildArray(node, rootName, result) {
   node = node[0];
   switch (node.type) {
     case 'Object': {
-      let buildObject1 = buildObject(node, result);
+      let buildObject1 = buildObject(node, rootName, result);
       if (buildObject1) {
         result.childNodes.push(buildObject1);
       }
       break;
     }
     case 'Literal':
-      if (rootName) {
+      if (rootName && rootName !== ROOT_NAME) {
         result.currentNode += rootName + ': ' + typeof node.value + ';\n';
       }
       break;
@@ -18,23 +20,60 @@ function buildArray(node, rootName, result) {
   return result;
 }
 
-function buildObject(node, result) {
+function buildSubObject(node, rootName, result) {
+  if (!(node.value && node.value.children)) {
+    return;
+  }
+  let objectResult = '';
+  for (let i = 0; i < node.value.children.length; i++) {
+    const childNode = node.value.children[i];
+
+    switch (childNode.value.type) {
+      case 'Literal': {
+        objectResult += `${uppercaseFirstLetter(childNode.key.value)}: ${typeof childNode.value.value};`;
+        break;
+      }
+    }
+  }
+  return objectResult;
+}
+
+function buildObject(node, rootName, result) {
   let objectResult = '';
   for (let i = 0; i < node.children.length; i++) {
     const childNode = node.children[i];
-    let objectKey = childNode.key.value
+    let objectKey = childNode.key.value;
+    console.log(childNode.value.type, childNode.key.value, rootName);
 
+    let uppercaseFirstLetter1 = uppercaseFirstLetter(childNode.key.value);
     switch (childNode.value.type) {
+      case 'Object': {
+        let buildObject1 = buildSubObject(childNode, `${objectKey}`, result);
+
+        result.current += `${uppercaseFirstLetter1}: ${uppercaseFirstLetter1};\n`;
+        result.childNodes.push(`${uppercaseFirstLetter1}: ${buildObject1}`);
+        break;
+      }
       case 'Array': {
-        objectKey = uppercaseLetter(childNode.key.value);;
-        result.currentNode += `${objectKey}s: ${objectKey}[];\n` ;
+        objectKey = uppercaseLetter(childNode.key.value);
+        ;
+        if (rootName === ROOT_NAME) {
+          result.current += `${objectKey}s: ${objectKey}[];\n`;
+        } else {
+          objectResult += `${objectKey}s: ${objectKey}[];\n`;
+        }
+
         let arrayResult = buildArray([childNode.value.children[0]], `${objectKey}`, result);
         // console.log(arrayResult);
-        objectResult += `${arrayResult.currentNode}`;
+        // objectResult += `${arrayResult.currentNode}`;
         break;
       }
       case 'Literal': {
-        result.currentNode += `${uppercaseFirstLetter(childNode.key.value)}: ${typeof childNode.value.value};\n`;
+        if (rootName === ROOT_NAME) {
+          result.current += `${uppercaseFirstLetter1}: ${typeof childNode.value.value};\n`;
+        } else {
+          objectResult += `${uppercaseFirstLetter1}: ${typeof childNode.value.value};\n`;
+        }
         break;
       }
     }
@@ -130,7 +169,7 @@ function codeGenerator(originNode, node, res, result) {
 function generator(node) {
   let result = {
     childNodes: [],
-    currentNode: ''
+    current: ''
   };
 
   if (typeof node === 'object') {
@@ -141,7 +180,7 @@ function generator(node) {
 
   // let dataSource = JSON.parse(JSON.stringify(node));
   // return codeGenerator(node, dataSource, res, result);
-  result = buildArray(node, null, result);
+  result = buildArray(node, ROOT_NAME, result);
   // console.log('{\n' + result.currentNode + '}');
   // console.log(result.childNodes);
   return result;
