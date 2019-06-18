@@ -12,7 +12,7 @@ function buildArray(node, rootName, result) {
     }
     case 'Literal':
       if (rootName && rootName !== ROOT_NAME) {
-        result.currentNode += rootName + ': ' + typeof node.value + ';\n';
+        result.tempNode += rootName + ': ' + typeof node.value + ';\n';
       }
       break;
   }
@@ -20,35 +20,17 @@ function buildArray(node, rootName, result) {
   return result;
 }
 
-function buildSubObject(node, rootName, result) {
-  if (!(node.value && node.value.children)) {
-    return;
-  }
+function buildObject(node, rootName, result, isSubObject) {
   let objectResult = '';
-  for (let i = 0; i < node.value.children.length; i++) {
-    const childNode = node.value.children[i];
-
-    switch (childNode.value.type) {
-      case 'Literal': {
-        objectResult += `${uppercaseFirstLetter(childNode.key.value)}: ${typeof childNode.value.value};`;
-        break;
-      }
-    }
-  }
-  return objectResult;
-}
-
-function buildObject(node, rootName, result) {
-  let objectResult = '';
-  for (let i = 0; i < node.children.length; i++) {
-    const childNode = node.children[i];
+  let nodeChildren = isSubObject ? node.value.children : node.children;
+  for (let i = 0; i < nodeChildren.length; i++) {
+    const childNode = nodeChildren[i];
     let objectKey = childNode.key.value;
-    console.log(childNode.value.type, childNode.key.value, rootName);
 
     let uppercaseFirstLetter1 = uppercaseFirstLetter(childNode.key.value);
     switch (childNode.value.type) {
       case 'Object': {
-        let buildObject1 = buildSubObject(childNode, `${objectKey}`, result);
+        let buildObject1 = buildObject(childNode, `${objectKey}`, result, true);
 
         result.current += `${uppercaseFirstLetter1}: ${uppercaseFirstLetter1};\n`;
         result.childNodes.push(`${uppercaseFirstLetter1}: ${buildObject1}`);
@@ -56,7 +38,6 @@ function buildObject(node, rootName, result) {
       }
       case 'Array': {
         objectKey = uppercaseLetter(childNode.key.value);
-        ;
         if (rootName === ROOT_NAME) {
           result.current += `${objectKey}s: ${objectKey}[];\n`;
         } else {
@@ -64,7 +45,6 @@ function buildObject(node, rootName, result) {
         }
 
         let arrayResult = buildArray([childNode.value.children[0]], `${objectKey}`, result);
-        // console.log(arrayResult);
         // objectResult += `${arrayResult.currentNode}`;
         break;
       }
@@ -169,7 +149,8 @@ function codeGenerator(originNode, node, res, result) {
 function generator(node) {
   let result = {
     childNodes: [],
-    current: ''
+    current: '',
+    tempNode: ''
   };
 
   if (typeof node === 'object') {

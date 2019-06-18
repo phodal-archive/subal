@@ -12,5 +12,9 @@
   "asss": "11",
   "name": "234",
   "node2": {
-    "id": 1
+    "id": 1,
+    "name": "hello",
+    "titleList": [
+      "a"
+    ]
   }}
