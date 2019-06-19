@@ -1,5 +1,6 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
-const path = require('path');
 const Subal = require('./index');
 
 if (process.argv.length < 3) {
