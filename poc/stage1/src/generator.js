@@ -47,13 +47,22 @@ function buildObject(node, rootName, result, isSubObject) {
       }
       case 'Array': {
         objectKey = uppercaseLetterAndRemoveLastS(childNode.key.value);
-        if (rootName === ROOT_NAME) {
-          result.currentObject[objectKey] = `${objectKey}[]`;
-        } else {
-          objectResultObj[objectKey + 's'] = objectKey + '[]';
-        }
 
-        buildArray([childNode.value.children[0]], `${objectKey}`, result);
+        if (childNode.value.children && childNode.value.children[0].type === 'Literal') {
+          if (rootName === ROOT_NAME) {
+            result.currentObject[objectKey] = `${typeof childNode.value.children[0].value} []`;
+          } else {
+            objectResultObj[objectKey] = `${typeof childNode.value.children[0].value}`;
+          }
+        } else {
+          if (rootName === ROOT_NAME) {
+            result.currentObject[objectKey] = `${objectKey}[]`;
+          } else {
+            objectResultObj[objectKey + 's'] = objectKey + '[]';
+          }
+
+          buildArray([childNode.value.children[0]], `${objectKey}`, result);
+        }
         break;
       }
       case 'Literal': {

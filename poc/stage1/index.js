@@ -17,10 +17,7 @@ class Subal {
     return this;
   };
 
-  generator(isDebug) {
-    if (isDebug) {
-      console.log(JSON.stringify(this.ast));
-    }
+  generator() {
     this.code = generator(this.ast);
     return this;
   };
@@ -58,8 +55,7 @@ class Subal {
       renderString += `}\n\n`;
     }
 
-    console.log(renderString);
-    return this;
+    return renderString;
   }
 }
 
