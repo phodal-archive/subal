@@ -1,6 +1,6 @@
 const tokenizer = require('./src/tokenizer');
 const parser = require('./src/parser');
-const generator = require('./src/generator-obj');
+const generator = require('./src/generator');
 
 class Subal {
   constructor(data) {
