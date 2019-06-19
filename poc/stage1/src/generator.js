@@ -9,7 +9,7 @@ function buildArray(node, rootName, result) {
   switch (node.type) {
     case 'Object': {
       let buildObject1 = buildObject(node, rootName, result);
-      if (buildObject1) {
+      if (buildObject1 && rootName !== ROOT_NAME) {
         result.childNodes.push(`interface ${rootName} {\n  ${buildObject1} }\n`);
       }
       break;
@@ -66,7 +66,6 @@ function buildObject(node, rootName, result, isSubObject) {
     }
   }
 
-  // objectResult += '}\n';
   return objectResult;
 }
 
