@@ -41,6 +41,7 @@ function buildObject(node, rootName, result, isSubObject) {
           result.currentObject[uppercaseFirstLetter1] = uppercaseFirstLetter1;
         }
 
+        objectResultObj[uppercaseFirstLetter1] = uppercaseLetterAndRemoveLastS(objectKey);
         result.childObjects[uppercaseFirstLetter1] = buildObject1;
         break;
       }
@@ -52,15 +53,14 @@ function buildObject(node, rootName, result, isSubObject) {
           objectResultObj[objectKey + 's'] = objectKey + '[]';
         }
 
-        let arrayResult = buildArray([childNode.value.children[0]], `${objectKey}`, result);
-        objectResultObj = Object.assign(objectResultObj, arrayResult.tempObject);
+        buildArray([childNode.value.children[0]], `${objectKey}`, result);
         break;
       }
       case 'Literal': {
-        objectResultObj[uppercaseFirstLetter1] = typeof childNode.value.value;
-
         if (rootName === ROOT_NAME) {
           result.currentObject[uppercaseFirstLetter1] = typeof childNode.value.value;
+        } else {
+          objectResultObj[uppercaseFirstLetter1] = typeof childNode.value.value;
         }
         break;
       }

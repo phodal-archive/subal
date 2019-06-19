@@ -29,12 +29,36 @@ class Subal {
     return this.code;
   }
 
-  renderString() {
-    console.log(`interface HeimdallGenerator {\n ${this.code.current} }\n`);
-    for (let i = 0; i < this.code.childNodes.length; i++) {
-      console.log(this.code.childNodes[i]);
+  renderString(rootName) {
+    let renderString = '';
+
+    renderString += `interface ${rootName} {\n`;
+    let mainNodeKey = Object.keys(this.code.currentObject);
+    for (let k = 0; k < mainNodeKey.length; k++) {
+      let subNodeKey = mainNodeKey[k];
+
+      renderString += `  ${subNodeKey}: ${this.code.currentObject[subNodeKey]};\n`
+    }
+    renderString += `}\n\n`;
+
+    let nodeKeys = Object.keys(this.code.childObjects);
+    for (let i = 0; i < nodeKeys.length; i++) {
+      let nodeKey = nodeKeys[i];
+      let nodeValue = this.code.childObjects[nodeKey];
+
+      renderString += `interface ${nodeKey} {\n`;
+
+      let subNodeKeys = Object.keys(nodeValue);
+      for (let j = 0; j < subNodeKeys.length; j++) {
+        let subNodeKey = subNodeKeys[j];
+
+        renderString += `  ${subNodeKey}: ${nodeValue[subNodeKey]};\n`
+      }
+
+      renderString += `}\n\n`;
     }
 
+    console.log(renderString);
     return this;
   }
 }
