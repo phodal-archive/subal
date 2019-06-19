@@ -25,8 +25,17 @@ class Subal {
     return this;
   };
 
-  build () {
+  build() {
     return this.code;
+  }
+
+  renderString() {
+    console.log(`interface  {\n ${this.code.current} }\n`);
+    for (let i = 0; i < this.code.childNodes.length; i++) {
+      console.log(this.code.childNodes[i]);
+    }
+
+    return this;
   }
 }
 

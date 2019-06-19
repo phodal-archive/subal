@@ -9,14 +9,15 @@
       "title": "快速入门2"
     }
   ],
+  "str": ["af", "fas"],
   "asss": "11",
   "name": "234",
   "node2": {
     "id": 1,
     "name": "hello",
-    "titleList": [
-      "a"
-    ],
+    "titleList": [{
+      "titleId": "1"
+    }],
     "subObject": {
       "subId": "1"
     }
