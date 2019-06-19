@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Subal = require('../index');
 
-const filePath = path.join(__dirname, 'fixture/blogs.json');
+const filePath = path.join(__dirname, 'fixture/tests-simple.json');
 
 fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
   if (!err) {
@@ -12,7 +12,9 @@ fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
       .tokenizer()
       .parser()
       .generator()
-      .renderString();
+      .build();
+
+    console.log(results);
   } else {
     console.log(err);
   }
