@@ -44,7 +44,7 @@ function buildObject(node, rootName, result, isSubObject) {
         break;
       }
       case 'Array': {
-        objectKey = uppercaseLetter(childNode.key.value);
+        objectKey = uppercaseLetterAndRemoveLastS(childNode.key.value);
         if (rootName === ROOT_NAME) {
           result.current += `  ${objectKey}s: ${objectKey}[];\n`;
         } else {
@@ -82,7 +82,7 @@ function uppercaseFirstLetter(str) {
   return str;
 }
 
-function uppercaseLetter(str) {
+function uppercaseLetterAndRemoveLastS(str) {
   str = uppercaseFirstLetter(str);
 
   if (str[str.length - 1] === 's') {

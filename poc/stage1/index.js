@@ -30,7 +30,7 @@ class Subal {
   }
 
   renderString() {
-    console.log(`interface  {\n ${this.code.current} }\n`);
+    console.log(`interface HeimdallGenerator {\n ${this.code.current} }\n`);
     for (let i = 0; i < this.code.childNodes.length; i++) {
       console.log(this.code.childNodes[i]);
     }
