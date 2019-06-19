@@ -32,7 +32,9 @@ function buildObject(node, rootName, result, isSubObject) {
       case 'Object': {
         let buildObject1 = buildObject(childNode, `${objectKey}`, result, true);
 
-        result.current += `${uppercaseFirstLetter1}: ${uppercaseFirstLetter1};\n`;
+        if (!isSubObject) {
+          result.current += `${uppercaseFirstLetter1}: ${uppercaseFirstLetter1};\n`;
+        }
         result.childNodes.push(`${uppercaseFirstLetter1}: ${buildObject1}`);
         break;
       }
