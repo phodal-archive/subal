@@ -1,9 +1,13 @@
-# Stage 1
+# Subal Stage 1
 
-JSON 转 TypeScript：[https://github.com/MariusAlch/json-to-ts](https://github.com/MariusAlch/json-to-ts)
+```
+npm install -g subal
+subal **.json RootInerfaceName
+```
 
-Similar Project: https://github.com/vtrushin/json-to-ast
+License
+---
 
-# Stage 1.1
+[![Phodal's Idea](http://brand.phodal.com/shields/idea-small.svg)](http://ideas.phodal.com/)
 
-JSON 生成 Usecase、Repository 代码及 JSON
+@ 2019 A [Phodal Huang](https://www.phodal.com)'s [Idea](http://github.com/phodal/ideas).  This code is distributed under the MIT license. See `LICENSE` in this directory.

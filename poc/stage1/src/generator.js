@@ -6,6 +6,10 @@ function buildArray(node, rootName, result) {
     result.tempObject = {}
   }
   node = node[0];
+  if (!node) {
+    return {};
+  }
+
   switch (node.type) {
     case 'Object': {
       let buildObject1 = buildObject(node, rootName, result, false, false);
@@ -48,7 +52,7 @@ function buildObject(node, rootName, result, isSubObject) {
       case 'Array': {
         objectKey = uppercaseLetterAndRemoveLastS(childNode.key.value);
 
-        if (childNode.value.children && childNode.value.children[0].type === 'Literal') {
+        if (childNode.value.children && childNode.value.children.length > 0 && childNode.value.children[0].type === 'Literal') {
           if (rootName === ROOT_NAME) {
             result.currentObject[objectKey] = `${typeof childNode.value.children[0].value} []`;
           } else {
