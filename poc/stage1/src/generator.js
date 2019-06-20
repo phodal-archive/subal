@@ -54,9 +54,9 @@ function buildObject(node, rootName, result, isSubObject) {
 
         if (childNode.value.children && childNode.value.children.length > 0 && childNode.value.children[0].type === 'Literal') {
           if (rootName === ROOT_NAME) {
-            result.currentObject[objectKey] = `${typeof childNode.value.children[0].value} []`;
+            result.currentObject[objectKey] = `${typeof childNode.value.children[0].value}[]`;
           } else {
-            objectResultObj[objectKey] = `${typeof childNode.value.children[0].value} []`;
+            objectResultObj[objectKey] = `${typeof childNode.value.children[0].value}[]`;
           }
         } else {
           if (rootName === ROOT_NAME) {
