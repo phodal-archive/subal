@@ -11,8 +11,11 @@
 相关资料：
 
  - Textlint 中的 [markdown-to-ast](https://github.com/textlint/textlint/tree/master/packages/%40textlint/markdown-to-ast)
+ - [Remark](https://github.com/gnab/remark/tree/develop/src/remark)
+ - [markdown-it](https://github.com/markdown-it/markdown-it/tree/master/lib)
+ - [showdown](https://github.com/showdownjs/showdown/blob/master/src/converter.js)
+ - [markdown-js](https://github.com/evilstreak/markdown-js)
  - Remark.js 中的 [Parse](https://github.com/remarkjs/remark/tree/master/packages/remark-parse/lib)
- - [showdown](https://github.com/showdownjs/showdown/tree/master/src)
 
 相近：
 
