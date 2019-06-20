@@ -56,7 +56,7 @@ function buildObject(node, rootName, result, isSubObject) {
           if (rootName === ROOT_NAME) {
             result.currentObject[objectKey] = `${typeof childNode.value.children[0].value} []`;
           } else {
-            objectResultObj[objectKey] = `${typeof childNode.value.children[0].value}`;
+            objectResultObj[objectKey] = `${typeof childNode.value.children[0].value} []`;
           }
         } else {
           if (rootName === ROOT_NAME) {

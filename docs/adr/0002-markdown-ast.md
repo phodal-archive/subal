@@ -14,6 +14,10 @@
  - Remark.js 中的 [Parse](https://github.com/remarkjs/remark/tree/master/packages/remark-parse/lib)
  - [showdown](https://github.com/showdownjs/showdown/tree/master/src)
 
+相近：
+
+ - [CSSTree](https://github.com/csstree/csstree)
+
 可参考标准
 
  - [mdast](https://github.com/syntax-tree/mdast): Markdown Abstract Syntax Tree format 
