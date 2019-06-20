@@ -1,5 +1,5 @@
 {
-  "name": "subal",
+  "name": "@subal/json",
   "version": "0.0.6",
   "description": "JSON to TypeScript & Usecase & Repository",
   "main": "index.js",
