@@ -37,7 +37,7 @@ function buildObject(node, rootName, result, isSubObject) {
     const childNode = nodeChildren[i];
     let objectKey = childNode.key.value;
 
-    let uppercaseFirstLetter1 = childNode.key.value;
+    let uppercaseFirstLetter1 = removeQuote(childNode.key.value);
     switch (childNode.value.type) {
       case 'Object': {
         let buildObject1 = buildObject(childNode, `${objectKey}`, result, true);
@@ -45,12 +45,12 @@ function buildObject(node, rootName, result, isSubObject) {
           result.currentObject[uppercaseFirstLetter1] = uppercaseFirstLetter1;
         }
 
-        objectResultObj[uppercaseFirstLetter1] = uppercaseLetterAndRemoveLastS(objectKey);
+        objectResultObj[uppercaseFirstLetter1] = remoteQuoteAndRemoveLastS(objectKey);
         result.childObjects[uppercaseFirstLetter1] = buildObject1;
         break;
       }
       case 'Array': {
-        objectKey = uppercaseLetterAndRemoveLastS(childNode.key.value);
+        objectKey = remoteQuoteAndRemoveLastS(childNode.key.value);
 
         if (childNode.value.children && childNode.value.children.length > 0 && childNode.value.children[0].type === 'Literal') {
           if (rootName === ROOT_NAME) {
@@ -83,7 +83,21 @@ function buildObject(node, rootName, result, isSubObject) {
   return objectResultObj;
 }
 
-function uppercaseLetterAndRemoveLastS(str) {
+function removeQuote(str) {
+  if (str.charAt(0) === '"') {
+    str = str.substr(1);
+  }
+
+  if (str.charAt(str.length - 1) === '"') {
+    str = str.substr(0, str.length - 1);
+  }
+
+  return str;
+}
+
+function remoteQuoteAndRemoveLastS(str) {
+  str = removeQuote(str);
+
   if (str[str.length - 1] === 's') {
     str = str.substr(0, str.length - 1);
   }
