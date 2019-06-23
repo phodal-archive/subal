@@ -37,7 +37,7 @@ function buildObject(node, rootName, result, isSubObject) {
     const childNode = nodeChildren[i];
     let objectKey = childNode.key.value;
 
-    let uppercaseFirstLetter1 = uppercaseFirstLetter(childNode.key.value);
+    let uppercaseFirstLetter1 = childNode.key.value;
     switch (childNode.value.type) {
       case 'Object': {
         let buildObject1 = buildObject(childNode, `${objectKey}`, result, true);
@@ -83,22 +83,7 @@ function buildObject(node, rootName, result, isSubObject) {
   return objectResultObj;
 }
 
-function uppercaseFirstLetter(str) {
-  if (str.charAt(0) === '"') {
-    str = str.substr(1);
-  }
-
-  if (str.charAt(str.length - 1) === '"') {
-    str = str.substr(0, str.length - 1);
-  }
-
-  str = str.charAt(0).toUpperCase() + str.slice(1);
-  return str;
-}
-
 function uppercaseLetterAndRemoveLastS(str) {
-  str = uppercaseFirstLetter(str);
-
   if (str[str.length - 1] === 's') {
     str = str.substr(0, str.length - 1);
   }

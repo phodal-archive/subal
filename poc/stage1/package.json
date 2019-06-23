@@ -1,9 +1,11 @@
 {
   "name": "@subal/json",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "JSON to TypeScript & Usecase & Repository",
   "main": "index.js",
-  "bin": "cli.js",
+  "bin": {
+    "subal": "cli.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
