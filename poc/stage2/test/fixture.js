@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Subal = require('../index');
 
-const filePath = path.join(__dirname, 'examples.md');
+const filePath = path.join(__dirname, 'basic.md');
 
 fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
   if (!err) {

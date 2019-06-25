@@ -1,5 +1,5 @@
 const tokenizer = require('./src/tokenizer');
-const lexer = require('./src/lexer');
+const lexer = require('./src/parser');
 const generator = require('./src/generator');
 
 class SubalMd {
