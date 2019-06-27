@@ -18,6 +18,17 @@ function lexer(src) {
       }
     }
 
+    // heading
+    if (cap = this.rules.heading.exec(src)) {
+      src = src.substring(cap[0].length);
+      this.tokens.push({
+        type: 'heading',
+        depth: cap[1].length,
+        text: cap[2]
+      });
+      continue;
+    }
+
     // text
     if (cap = this.rules.text.exec(src)) {
       // Top-level should never reach here.
