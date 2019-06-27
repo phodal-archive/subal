@@ -9,8 +9,8 @@ fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
     let subal = new Subal(data);
 
     let results = subal
+      .lexer()
       .tokenizer()
-      .parser()
       .generator();
 
     console.log(results);

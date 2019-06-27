@@ -1,5 +1,5 @@
 const tokenizer = require('./src/tokenizer');
-const lexer = require('./src/parser');
+const lexer = require('./src/lexer');
 const generator = require('./src/generator');
 
 class SubalMd {
@@ -7,13 +7,13 @@ class SubalMd {
     this.data = data;
   }
 
-  parser() {
-    this.ast = lexer(this.tokens);
+  lexer() {
+    this.ast = lexer(this.data);
     return this;
   };
 
   tokenizer() {
-    this.tokens = tokenizer(this.data);
+    this.tokens = tokenizer(this.ast);
     return this;
   };
 
