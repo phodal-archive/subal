@@ -12,8 +12,7 @@ fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
       .lexer()
       .tokenizer()
       .generator();
-
-    console.log(results);
+    // console.log(results);
   } else {
     console.log(err);
   }

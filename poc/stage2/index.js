@@ -8,7 +8,7 @@ class SubalMd {
   }
 
   lexer() {
-    this.ast = lexer(this.data);
+    this.ast = lexer(this.data, true);
     return this;
   };
 
