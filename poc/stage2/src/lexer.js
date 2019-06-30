@@ -1,11 +1,78 @@
 const block = require('./utils/block');
 
-function lexer(src, top) {
-  let cap;
-  this.tokens = [];
 
-  src = src.replace(/^ +$/gm, '');
+/**
+ * Block-Level Grammar
+ */
+
+function Lexer(options) {
+  this.tokens = [];
+  this.tokens.links = Object.create(null);
+  this.options = options;
   this.rules = block.normal;
+
+  if (this.options.pedantic) {
+    this.rules = block.pedantic;
+  } else if (this.options.gfm) {
+    if (this.options.tables) {
+      this.rules = block.tables;
+    } else {
+      this.rules = block.gfm;
+    }
+  }
+}
+
+/**
+ * Expose Block Rules
+ */
+
+Lexer.rules = block;
+
+/**
+ * Static Lex Method
+ */
+
+Lexer.lex = function(src, options) {
+  let lexer = new Lexer(options);
+  return lexer.lex(src);
+};
+
+/**
+ * Preprocessing
+ */
+
+Lexer.prototype.lex = function(src) {
+  src = src
+    .replace(/\r\n|\r/g, '\n')
+    .replace(/\t/g, '    ')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\u2424/g, '\n');
+
+  return this.token(src, true);
+};
+
+/**
+ * Lexing
+ */
+
+Lexer.prototype.token = function(src, top) {
+  src = src.replace(/^ +$/gm, '');
+  var next,
+    loose,
+    cap,
+    bull,
+    b,
+    item,
+    listStart,
+    listItems,
+    t,
+    space,
+    i,
+    tag,
+    l,
+    isordered,
+    istask,
+    ischecked;
 
   while (src) {
     // newline
@@ -116,7 +183,7 @@ function lexer(src, top) {
       // Pass `top` to keep the current
       // "toplevel" state. This is exactly
       // how markdown.pl works.
-      lexer(cap, top);
+      this.token(cap, top);
 
       this.tokens.push({
         type: 'blockquote_end'
@@ -327,10 +394,13 @@ function lexer(src, top) {
       });
       continue;
     }
+
+    if (src) {
+      throw new Error('Infinite loop on byte: ' + src.charCodeAt(0));
+    }
   }
 
-  console.log(this.tokens);
   return this.tokens;
-}
+};
 
-module.exports = lexer;
+module.exports = Lexer.lex;
