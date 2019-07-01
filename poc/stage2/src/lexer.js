@@ -1,5 +1,5 @@
 const block = require('./utils/block');
-
+const splitCells = require('./utils/splitCells');
 
 /**
  * Block-Level Grammar
