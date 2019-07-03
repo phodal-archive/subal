@@ -57,17 +57,31 @@ create-blog
 
 YAML 示例：
 
+表单类型
+
 ```
 form: -> form fields -> input
                      -> checkbox
                      -> dropdown
+                     -> select
+                     -> radio
                      -> submit
+                     -> toggle
+      complex fields -> date picker
+                     -> slidder
+```
+
+组件类型
+
+```
 card:
 list -> item
 item -> card
 ```
 
 Hypertext -> Virtualdom 
+
+#### 基于 JSON 的布局生成器
 
 #### 面向前端的模型管理
 
@@ -76,11 +90,15 @@ Hypertext -> Virtualdom
 
 
 
-####
+#### 基于组件的统一语言设计
 
 ## 决策
 
 在这里补充上决策信息...
+
+#### Usecase 生成使用文档
+
+
 
 ## 后果
 
