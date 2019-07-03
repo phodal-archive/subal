@@ -1,3 +1,11 @@
+# 状态机
+
+## 库
+
+[xstate](https://github.com/davidkpiano/xstate)
+
+## 文章
+
 https://hackernoon.com/upgrade-your-react-ui-with-state-machines-30d1298e90be
 
 用户界面与状态机，对应的 React 代码示例：

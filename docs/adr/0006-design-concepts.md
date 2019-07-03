@@ -93,7 +93,9 @@ Hypertext -> Virtualdom
 #### 基于组件的统一语言设计
 
 
-#### 状态机管理的用户交互 
+#### 状态机管理的组件设计
+
+empty -> loading -> success -> error -> more -> reloading
 
 
 ## 决策
