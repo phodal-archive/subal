@@ -88,8 +88,6 @@ Hypertext -> Virtualdom
 1. 模型优化与类型检索
 2. 重复模型管理
 
-
-
 #### 基于组件的统一语言设计
 
 
@@ -97,9 +95,19 @@ Hypertext -> Virtualdom
 
 empty -> loading -> success -> error -> more -> reloading
 
+#### 独立于框架的组件
 
 #### 组件化架构图生成
 
+#### 基于工厂模式的表单校验
+
+通用表单模式
+
+#### DSL 形式的状态管理 or 状态管理生成 DSL 
+
+#### 注解即用户文档
+
+#### usecase 契约测试
 
 ## 决策
 
