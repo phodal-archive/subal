@@ -98,6 +98,9 @@ Hypertext -> Virtualdom
 empty -> loading -> success -> error -> more -> reloading
 
 
+#### 组件化架构图生成
+
+
 ## 决策
 
 在这里补充上决策信息...
