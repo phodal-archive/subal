@@ -109,13 +109,26 @@ empty -> loading -> success -> error -> more -> reloading
 
 #### usecase 契约测试
 
-## 决策
-
-在这里补充上决策信息...
 
 #### Usecase 生成使用文档
 
+#### 路由封装
 
+路由即文档策略，中心化路由，生成页面调用关系。
+
+示例：
+
+Page blabla
+Click blabla Button
+Navto blabla Page
+
+```
+routeService.from('HomePage').goto('DetailPage')
+```
+
+## 决策
+
+在这里补充上决策信息...
 
 ## 后果
 
