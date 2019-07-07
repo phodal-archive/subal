@@ -126,6 +126,11 @@ Navto blabla Page
 routeService.from('HomePage').goto('DetailPage')
 ```
 
+#### 组件对于业务的抽象
+
+抽象是消除意外 复杂性的手段。
+
+
 ## 决策
 
 在这里补充上决策信息...
