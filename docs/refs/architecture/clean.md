@@ -37,6 +37,14 @@ Usecase 的复用率极低，项目会因而急剧的增加类和重复代码。
  - 返回数据管理
  - 输入参数管理
 
+## 问题：Service 和 Usecase 混用
+
+如果需要开发者去区分 Service 或者 Usecase 需要一定的水平
+
+这就意味着，要么全部变成 Service，要么部分变成 Usecase
+
+在 Usecase 里转换模型
+
 RESTful 开头 GET/POST/DELETE/PUT
 
 UPDATE / SEARCH
