@@ -45,6 +45,12 @@ Usecase 的复用率极低，项目会因而急剧的增加类和重复代码。
 
 在 Usecase 里转换模型
 
+## 表单处理和验证
+
+模型转换 -> 字段校验 -> 业务逻辑处理 -> 对齐 API
+
+## 其它 
+
 RESTful 开头 GET/POST/DELETE/PUT
 
 UPDATE / SEARCH
