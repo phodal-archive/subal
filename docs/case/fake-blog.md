@@ -65,7 +65,18 @@ top,bottom, center, left, right
 百分比
 ```
 
+# 前端架构图设计
 
+应用   ->   模块   ->   路由   ->   页面   ->   容器   ->   组件
+
+app       module      route       page     container  component
+              
+              
+WIREFRAME -> Design
+
+       
+### 导航即模块？
+                       
 # 基础组件
 
 ## 识别复用粒度
