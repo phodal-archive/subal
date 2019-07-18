@@ -50,4 +50,48 @@ DomainModel -> Name Term SceneRef
 
 [由 FlexBox 算法强力驱动的 Weex 布局引擎](https://www.jianshu.com/p/d085032d4788)
 
+### 百度 AMIS
 
+> 一种页面渲染器，可以直接基于特定格式的 JSON 配置将页面渲染出来，结合业务方 API 可快速完成各类管理页面的开发。
+  
+https://github.com/baidu/amis
+
+示例：
+
+```json
+{
+    "$schema": "https://houtai.baidu.com/v2/schemas/page.json#",
+    "type": "page",
+    "body": {
+        "api": "https://houtai.baidu.com/api/mock2/form/saveForm",
+        "type": "form",
+        "title": "联系我们",
+        "controls": [
+            {
+                "type": "text",
+                "label": "姓名",
+                "name": "name"
+            },
+            {
+                "type": "email",
+                "label": "邮箱",
+                "name": "email",
+                "required": true
+            },
+            {
+                "type": "textarea",
+                "label": "内容",
+                "name": "content",
+                "required": true
+            }
+        ],
+        "actions": [
+            {
+                "label": "发送",
+                "type": "submit",
+                "primary": true
+            }
+        ]
+    }
+}
+```
